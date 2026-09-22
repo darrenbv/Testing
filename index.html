@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Customer Request Portal</title>
+
+<style>
+
+body{
+    background:#f4f6f9;
+    font-family:'Segoe UI';
+}
+
+.container{
+    width:600px;
+    margin:50px auto;
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#0078d4;
+}
+
+input,textarea,select{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    margin-bottom:15px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    box-sizing:border-box;
+}
+
+button{
+    width:100%;
+    background:#0078d4;
+    color:white;
+    padding:14px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#106ebe;
+}
+
+.success{
+    margin-top:20px;
+    color:green;
+    text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Customer Request Portal</h1>
+
+<label>Request Title</label>
+<input type="text" id="title">
+
+<label>Department</label>
+<select id="department">
+<option>Finance</option>
+<option>HR</option>
+<option>IT</option>
+<option>Operations</option>
+</select>
+
+<label>Description</label>
+<textarea id="description" rows="5"></textarea>
+
+<label>Requester Name</label>
+<input type="text" id="requester">
+
+<button onclick="submitForm()">
+Submit Request
+</button>
+
+<div id="message" class="success"></div>
+
+</div>
+
+<script>
+
+function submitForm()
+{
+
+const data = {
+
+Title: document.getElementById('title').value,
+
+Department: document.getElementById('department').value,
+
+Description: document.getElementById('description').value,
+
+Requester: document.getElementById('requester').value
+
+};
+
+fetch("PASTE_YOUR_FLOW_URL_HERE",
+{
+method:"POST",
+headers:
+{
+"Content-Type":"application/json"
+},
+body: JSON.stringify(data)
+})
+.then(response => {
+
+document.getElementById('message').innerHTML =
+"✅ Request submitted successfully!";
+
+})
+.catch(error => {
+
+document.getElementById('message').innerHTML =
+"❌ Error occurred.";
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
