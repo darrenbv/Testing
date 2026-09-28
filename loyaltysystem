@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6d5dfc">
+<title>Nova Rewards</title>
+<style>
+:root{
+  --primary:#6d5dfc; --primary-dark:#5547df; --primary-soft:#eeecff;
+  --secondary:#00b8a9; --secondary-soft:#ddfaf7;
+  --accent:#ffb703; --accent-soft:#fff5d5;
+  --danger:#e5484d; --danger-soft:#fff0f0;
+  --success:#16a66a; --success-soft:#e8fff4;
+  --info:#1686d9; --info-soft:#eaf6ff;
+  --bg:#f6f7ff; --surface:#fff; --surface-soft:#fafaff;
+  --text:#1d2340; --text-soft:#5f6685; --text-muted:#8f95ad;
+  --border:#e7e9f3;
+  --shadow:0 20px 60px rgba(77,67,156,.12);
+  --shadow-soft:0 10px 30px rgba(50,45,100,.08);
+  --pill:999px;
+  --safe:env(safe-area-inset-bottom,0px);
+  --nav-h:76px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;min-height:100vh;color:var(--text);
+  background:
+    radial-gradient(circle at 0% 0%,rgba(109,93,252,.18),transparent 32%),
+    radial-gradient(circle at 100% 8%,rgba(0,184,169,.14),transparent 26%),
+    linear-gradient(180deg,#fbfbff,var(--bg));
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+button,input,select{font:inherit}
+button{-webkit-tap-highlight-color:transparent;cursor:pointer}
+.hidden{display:none !important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+
+.shell{position:relative;width:min(100%,520px);min-height:100vh;margin:0 auto}
+.hdr{
+  position:sticky;top:0;z-index:30;height:72px;display:flex;align-items:center;
+  justify-content:space-between;gap:14px;padding:12px 18px;
+  background:rgba(250,250,255,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(231,233,243,.85);
+}
+.lock{display:flex;align-items:center;gap:11px;min-width:0}
+.logo{
+  position:relative;flex:0 0 auto;width:44px;height:44px;display:grid;place-items:center;
+  border-radius:15px;color:#fff;font-weight:900;font-size:18px;
+  background:linear-gradient(135deg,var(--primary),#9a6cff);
+  box-shadow:0 10px 24px rgba(109,93,252,.26);
+}
+.logo::after{content:"";position:absolute;right:-2px;top:-2px;width:12px;height:12px;border-radius:50%;background:var(--secondary);border:3px solid #fff}
+.bname{margin:0;font-size:17px;font-weight:800;letter-spacing:-.025em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bcap{margin:3px 0 0;color:var(--text-muted);font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+.iconbtn{
+  width:44px;height:44px;flex:0 0 auto;display:grid;place-items:center;border:1px solid var(--border);
+  border-radius:15px;background:#fff;color:var(--text);box-shadow:var(--shadow-soft);transition:transform .16s,border-color .16s
+}
+.iconbtn:hover{transform:translateY(-2px);border-color:rgba(109,93,252,.35)}
+.iconbtn svg{width:20px;height:20px}
+main{padding:22px 18px calc(var(--nav-h) + 96px + var(--safe))}
+
+.page{display:none;animation:pe .32s cubic-bezier(.2,.8,.2,1)}
+.page.active{display:block}
+@keyframes pe{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+
+.eyebrow{margin:0 0 6px;color:var(--primary);font-size:11px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.title{margin:0;font-size:clamp(26px,7.6vw,33px);line-height:1.1;font-weight:900;letter-spacing:-.045em}
+.sub{margin:9px 0 0;color:var(--text-soft);font-size:14px;line-height:1.6}
+.sec{margin-top:26px}
+.sech{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:13px}
+.sect{margin:0;font-size:18px;font-weight:850;letter-spacing:-.03em}
+.seclink{border:0;padding:4px;background:none;color:var(--primary);font-size:13px;font-weight:800}
+.card{background:rgba(255,255,255,.95);border:1px solid rgba(231,233,243,.95);border-radius:26px;box-shadow:var(--shadow-soft)}
+
+.btn{min-height:54px;border-radius:17px;padding:0 20px;border:0;font-weight:850;display:inline-flex;align-items:center;justify-content:center;gap:10px;transition:transform .16s,opacity .16s}
+.btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn-p{color:#fff;background:linear-gradient(135deg,var(--primary),#8b62ff);box-shadow:0 14px 30px rgba(109,93,252,.25)}
+.btn-g{color:var(--text);background:#fff;border:1px solid var(--border)}
+.w100{width:100%}
+
+.wrow{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ava{width:52px;height:52px;flex:0 0 auto;display:grid;place-items:center;border-radius:18px;color:var(--primary);background:var(--primary-soft);font-size:17px;font-weight:900}
+
+.mcard{
+  position:relative;overflow:hidden;margin-top:20px;min-height:232px;padding:24px;color:#fff;border-radius:29px;
+  background:linear-gradient(135deg,#674cf4 0%,#8f66ff 48%,#00b8a9 140%);
+  box-shadow:0 26px 58px rgba(81,65,195,.3)
+}
+.mcard::before{content:"";position:absolute;width:215px;height:215px;top:-122px;right:-72px;border-radius:50%;background:rgba(255,255,255,.14)}
+.mcard::after{content:"";position:absolute;width:148px;height:148px;bottom:-103px;left:34px;border-radius:50%;background:rgba(255,255,255,.09)}
+.mtop,.mbot{position:relative;z-index:2}
+.mtop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.tbadge{padding:9px 13px;border-radius:var(--pill);background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.24);font-size:11px;font-weight:850;letter-spacing:.07em;text-transform:uppercase}
+.mnum{font-size:12px;font-weight:700;opacity:.8}
+.blabel{position:relative;z-index:2;margin-top:34px;font-size:13px;font-weight:650;opacity:.85}
+.bval{position:relative;z-index:2;display:flex;align-items:baseline;gap:8px;margin-top:4px}
+.bval strong{font-size:44px;line-height:1;font-weight:900;letter-spacing:-.06em}
+.bval span{font-size:15px;font-weight:750;opacity:.86}
+.mbot{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-top:32px}
+.mname{margin:0;font-size:15px;font-weight:850}
+.msince{margin:4px 0 0;font-size:11px;opacity:.72}
+.mmark{display:grid;place-items:center;width:38px;height:38px;border-radius:13px;background:rgba(255,255,255,.15);font-weight:900}
+
+.tier{padding:20px}
+.tiertop{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.tiert{margin:0;font-size:15px;font-weight:850}
+.tierc{margin:5px 0 0;color:var(--text-soft);font-size:12px}
+.tieric{width:43px;height:43px;display:grid;place-items:center;border-radius:15px;background:var(--accent-soft);color:#9b6900;font-size:19px}
+.track{height:11px;margin-top:17px;border-radius:var(--pill);background:#edf0f7;overflow:hidden}
+.fill{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.tlabels{display:flex;justify-content:space-between;gap:16px;margin-top:9px;color:var(--text-muted);font-size:11px;font-weight:700}
+
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.qa{min-width:0;border:1px solid var(--border);border-radius:19px;padding:14px 6px 12px;background:#fff;color:var(--text);box-shadow:var(--shadow-soft);transition:transform .16s,border-color .16s}
+.qa:hover{transform:translateY(-3px);border-color:rgba(109,93,252,.35)}
+.qic{width:40px;height:40px;margin:0 auto 8px;display:grid;place-items:center;border-radius:14px;color:var(--primary);background:var(--primary-soft)}
+.qa:nth-child(2) .qic{color:#03857b;background:var(--secondary-soft)}
+.qa:nth-child(3) .qic{color:#b27100;background:var(--accent-soft)}
+.qa:nth-child(4) .qic{color:var(--info);background:var(--info-soft)}
+.qa svg{width:20px;height:20px}
+.qa span{display:block;font-size:11px;font-weight:800;overflow:hidden;text-overflow:ellipsis}
+
+.promo{position:relative;overflow:hidden;padding:22px;background:linear-gradient(135deg,#fff3cb,#fff9e8);border:1px solid #ffe29c}
+.promo::after{content:"";position:absolute;width:120px;height:120px;right:-35px;top:-45px;border-radius:50%;background:rgba(255,183,3,.17)}
+.ptag{display:inline-flex;padding:6px 10px;border-radius:var(--pill);color:#8c6000;background:rgba(255,183,3,.2);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.ptitle{position:relative;z-index:2;width:76%;margin:14px 0 0;font-size:20px;line-height:1.22;font-weight:900;letter-spacing:-.035em}
+.pcopy{position:relative;z-index:2;width:78%;margin:8px 0 0;color:#7a6637;font-size:13px;line-height:1.5}
+
+.chips{display:flex;gap:9px;margin:20px -18px 0;padding:0 18px 4px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--border);border-radius:var(--pill);padding:10px 15px;background:#fff;color:var(--text-soft);font-size:12px;font-weight:800}
+.chip.active{color:#fff;background:var(--primary);border-color:var(--primary);box-shadow:0 9px 20px rgba(109,93,252,.22)}
+.rgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:18px}
+.rcard{overflow:hidden;text-align:left;padding:0;border:1px solid rgba(231,233,243,.95);background:#fff;border-radius:26px;box-shadow:var(--shadow-soft);transition:transform .18s,box-shadow .18s}
+.rcard:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.rimg{height:122px;display:grid;place-items:center;font-size:44px;background:linear-gradient(135deg,var(--primary-soft),var(--secondary-soft))}
+.rcard:nth-child(2n) .rimg{background:linear-gradient(135deg,var(--accent-soft),#fff0e4)}
+.rcard:nth-child(3n) .rimg{background:linear-gradient(135deg,var(--secondary-soft),#e6f8ff)}
+.rbody{padding:15px}
+.rcat{color:var(--text-muted);font-size:10px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+.rname{min-height:38px;margin:7px 0 12px;font-size:14px;line-height:1.35;font-weight:850}
+.rprice{display:flex;align-items:center;gap:6px;color:var(--primary);font-size:13px;font-weight:900}
+.rlock{color:var(--text-muted)}
+
+.vcard{position:relative;overflow:hidden;padding:21px;margin-top:14px}
+.vcard::before,.vcard::after{content:"";position:absolute;top:50%;width:24px;height:24px;border-radius:50%;background:var(--bg);transform:translateY(-50%)}
+.vcard::before{left:-13px}
+.vcard::after{right:-13px}
+.vtop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.vic{width:54px;height:54px;flex:0 0 auto;display:grid;place-items:center;border-radius:18px;background:var(--primary-soft);color:var(--primary);font-size:24px}
+.vstat{padding:7px 10px;border-radius:var(--pill);color:var(--success);background:var(--success-soft);font-size:10px;font-weight:900;text-transform:uppercase}
+.vtitle{margin:17px 0 0;font-size:18px;font-weight:900;letter-spacing:-.03em}
+.vdesc{margin:7px 0 0;color:var(--text-soft);font-size:13px;line-height:1.5}
+.vfoot{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:17px;padding-top:16px;border-top:1px dashed #d9dce8}
+.vexp{color:var(--text-muted);font-size:11px;font-weight:700}
+.vact{border:0;background:none;color:var(--primary);font-size:12px;font-weight:900}
+
+.empty{padding:36px 24px;text-align:center;margin-top:18px}
+.eic{width:70px;height:70px;margin:0 auto;display:grid;place-items:center;border-radius:23px;background:var(--primary-soft);color:var(--primary);font-size:28px}
+.etitle{margin:17px 0 0;font-size:18px;font-weight:900}
+.ecopy{margin:8px auto 0;max-width:280px;color:var(--text-soft);font-size:13px;line-height:1.55}
+
+.alist{margin-top:18px;padding:0 18px}
+.aitem{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:13px;padding:16px 0;border-bottom:1px solid var(--border)}
+.aitem:last-child{border-bottom:0}
+.aic{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:var(--success-soft);color:var(--success);font-size:18px;font-weight:900}
+.aic.redeemed{background:var(--danger-soft);color:var(--danger)}
+.aic.bonus{background:var(--accent-soft);color:#a76e00}
+.at{margin:0;font-size:14px;font-weight:850}
+.am{margin:5px 0 0;color:var(--text-muted);font-size:11px;line-height:1.45}
+.ap{text-align:right;color:var(--success);font-size:14px;font-weight:900}
+.ap.neg{color:var(--danger)}
+
+.phero{padding:25px;text-align:center}
+.pava{width:84px;height:84px;margin:0 auto;display:grid;place-items:center;border-radius:28px;color:#fff;font-size:26px;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--secondary));box-shadow:0 16px 32px rgba(109,93,252,.22)}
+.pname{margin:16px 0 0;font-size:22px;font-weight:900}
+.pphone{margin:6px 0 0;color:var(--text-soft);font-size:13px}
+.ptier{display:inline-flex;margin-top:12px;padding:8px 13px;border-radius:var(--pill);color:var(--primary);background:var(--primary-soft);font-size:11px;font-weight:900;text-transform:uppercase}
+.srow{width:100%;min-height:62px;display:flex;align-items:center;gap:13px;padding:13px 17px;border:0;border-bottom:1px solid var(--border);background:#fff;color:var(--text);text-align:left}
+.srow:last-child{border-bottom:0}
+.sic{width:38px;height:38px;flex:0 0 auto;display:grid;place-items:center;border-radius:13px;color:var(--primary);background:var(--primary-soft);font-size:16px}
+.scopy{flex:1;min-width:0}
+.st{display:block;font-size:13px;font-weight:850}
+.sc{display:block;margin-top:3px;color:var(--text-muted);font-size:10px}
+.sarr{color:var(--text-muted);font-size:18px}
+.settings{overflow:hidden}
+
+nav.bn{
+  position:fixed;z-index:40;left:50%;bottom:0;width:min(100%,520px);
+  display:grid;grid-template-columns:repeat(5,1fr);gap:4px;
+  padding:9px 9px calc(9px + var(--safe));transform:translateX(-50%);
+  background:rgba(255,255,255,.95);border-top:1px solid rgba(231,233,243,.95);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 -14px 34px rgba(44,39,87,.08)
+}
+.nb{min-width:0;border:0;border-radius:16px;padding:7px 2px 5px;color:var(--text-muted);background:none}
+.nb.active{color:var(--primary);background:var(--primary-soft)}
+.nb svg{width:21px;height:21px}
+.nic{display:grid;place-items:center;height:26px}
+.nl{display:block;margin-top:3px;font-size:9px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.fab{position:fixed;z-index:45;left:50%;bottom:calc(var(--nav-h) + 14px + var(--safe));width:min(calc(100% - 36px),484px);transform:translateX(-50%)}
+.fabbtn{width:100%;min-height:56px;border:0;border-radius:19px;color:#fff;font-weight:900;background:linear-gradient(135deg,var(--secondary),#08c7b6);box-shadow:0 17px 34px rgba(0,184,169,.26)}
+body:not(.fab-on) .fab{display:none}
+
+.mb{position:fixed;z-index:100;inset:0;display:none;align-items:flex-end;justify-content:center;padding:16px;background:rgba(23,26,48,.5);backdrop-filter:blur(8px)}
+.mb.open{display:flex}
+.mp{width:min(100%,500px);max-height:92vh;overflow-y:auto;border-radius:29px;background:#fff;box-shadow:0 30px 90px rgba(20,22,42,.3);animation:me .26s ease-out}
+@keyframes me{from{opacity:0;transform:translateY(28px) scale(.98)}to{opacity:1;transform:none}}
+.mh{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;background:rgba(255,255,255,.97);border-bottom:1px solid var(--border)}
+.mt{margin:0;font-size:18px;font-weight:900}
+.mx{width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:14px;background:var(--surface-soft);color:var(--text);font-size:20px}
+.mc{padding:22px}
+
+.ill{width:82px;height:82px;margin:0 auto 18px;display:grid;place-items:center;border-radius:28px;color:var(--primary);background:linear-gradient(135deg,var(--primary-soft),var(--secondary-soft));font-size:33px}
+.ch{margin:0;text-align:center;font-size:24px;font-weight:900;letter-spacing:-.04em}
+.cc{margin:9px auto 0;max-width:350px;text-align:center;color:var(--text-soft);font-size:13px;line-height:1.55}
+.rprev{margin-top:20px;padding:18px;border-radius:22px;background:var(--surface-soft);border:1px solid var(--border)}
+.rrow{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-top:12px;color:var(--text-soft);font-size:12px}
+.rrow:first-child{margin-top:0}
+.rrow strong{color:var(--text);text-align:right}
+.cpts{margin-top:17px;padding:16px;border-radius:18px;color:var(--primary-dark);background:var(--primary-soft);text-align:center}
+.cpts span{display:block;font-size:11px;font-weight:800;text-transform:uppercase}
+.cpts strong{display:block;margin-top:4px;font-size:24px;font-weight:900}
+
+.field{margin-top:18px}
+.flabel{display:block;margin-bottom:8px;font-size:12px;font-weight:850}
+.pfield{display:grid;grid-template-columns:78px 1fr;gap:9px}
+.cc2,.inp{width:100%;min-height:54px;border:1px solid var(--border);border-radius:16px;background:#fff;color:var(--text);outline:none}
+.cc2{display:grid;place-items:center;background:var(--surface-soft);font-size:13px;font-weight:850}
+.inp{padding:0 15px}
+.inp:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-soft)}
+.ferr{min-height:17px;margin:6px 0 0;color:var(--danger);font-size:11px;font-weight:700}
+.note{margin:13px 0 0;color:var(--text-muted);font-size:10px;line-height:1.5;text-align:center}
+
+.sv{padding:10px 0 2px;text-align:center}
+.schk{width:90px;height:90px;margin:0 auto;display:grid;place-items:center;border-radius:30px;color:#fff;font-size:36px;background:linear-gradient(135deg,var(--success),var(--secondary));box-shadow:0 18px 40px rgba(22,166,106,.24)}
+.stitle{margin:22px 0 0;font-size:26px;font-weight:900;letter-spacing:-.045em}
+.ssub{margin:9px auto 0;max-width:330px;color:var(--text-soft);font-size:13px;line-height:1.55}
+.spts{margin:22px 0;padding:22px;border-radius:22px;background:linear-gradient(135deg,var(--primary-soft),var(--secondary-soft))}
+.spts span{display:block;color:var(--text-soft);font-size:11px;font-weight:850;text-transform:uppercase}
+.spts strong{display:block;margin-top:5px;color:var(--primary);font-size:38px;font-weight:900;letter-spacing:-.05em}
+
+.toasts{position:fixed;z-index:200;top:16px;left:50%;width:min(calc(100% - 28px),470px);transform:translateX(-50%);pointer-events:none}
+.toast{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.98);border:1px solid var(--border);box-shadow:var(--shadow);font-size:13px;animation:te .26s ease-out}
+.toast.error{border-color:rgba(229,72,77,.3)}
+.toast.success{border-color:rgba(22,166,106,.28)}
+.tdot{width:26px;height:26px;flex:0 0 auto;display:grid;place-items:center;border-radius:9px;background:var(--success-soft);color:var(--success);font-weight:900}
+.toast.error .tdot{background:var(--danger-soft);color:var(--danger)}
+@keyframes te{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+.spin{width:19px;height:19px;border:3px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:sp .65s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+@media (min-width:760px){
+  body{padding:22px 0}
+  .shell{min-height:calc(100vh - 44px);border-radius:32px;border:1px solid rgba(231,233,243,.95);overflow:hidden;background:rgba(255,255,255,.4)}
+  nav.bn{bottom:22px;border-radius:0 0 32px 32px}
+  .fab{bottom:calc(var(--nav-h) + 36px + var(--safe))}
+}
+@media (max-width:370px){
+  main{padding-left:14px;padding-right:14px}
+  .rgrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body class="fab-on">
+
+<div class="shell">
+  <header class="hdr">
+    <div class="lock">
+      <div class="logo" id="brandLogo">N</div>
+      <div style="min-width:0">
+        <h1 class="bname" id="brandName">Nova Rewards</h1>
+        <p class="bcap">Loyalty made delightful</p>
+      </div>
+    </div>
+    <button class="iconbtn" type="button" data-action="notify" aria-label="Notifications">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section class="page active" id="page-home">
+      <div class="wrow">
+        <div>
+          <p class="eyebrow">Welcome back</p>
+          <h2 class="title">Hello, <span id="welcomeName">Alyssa</span></h2>
+          <p class="sub">Your next reward is closer than you think.</p>
+        </div>
+        <div class="ava" id="homeAvatar">AT</div>
+      </div>
+
+      <article class="mcard">
+        <div class="mtop">
+          <span class="tbadge" id="tierBadge">Gold Member</span>
+          <span class="mnum">•••• 2048</span>
+        </div>
+        <div class="blabel">Available points</div>
+        <div class="bval"><strong id="pointsBalance">0</strong><span>pts</span></div>
+        <div class="mbot">
+          <div>
+            <p class="mname" id="cardName">Alyssa Tan</p>
+            <p class="msince" id="cardSince">Member since 2026</p>
+          </div>
+          <div class="mmark" id="cardMark">N</div>
+        </div>
+      </article>
+
+      <section class="sec">
+        <article class="card tier">
+          <div class="tiertop">
+            <div>
+              <h3 class="tiert">Your tier journey</h3>
+              <p class="tierc" id="tierCaption">Keep earning to unlock the next tier</p>
+            </div>
+            <div class="tieric">✦</div>
+          </div>
+          <div class="track" role="progressbar" id="tierBar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="fill" id="tierFill"></div>
+          </div>
+          <div class="tlabels">
+            <span id="tierFloorLabel">Gold</span>
+            <span id="tierTargetLabel">Platinum</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="sec">
+        <div class="sech"><h3 class="sect">Explore</h3></div>
+        <div class="qgrid">
+          <button class="qa" type="button" data-action="nav" data-page="rewards">
+            <span class="qic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18"/><path d="M7.5 8C5 8 4 6.8 4 5.5S5.2 3 6.7 3C9.3 3 12 8 12 8"/><path d="M16.5 8C19 8 20 6.8 20 5.5S18.8 3 17.3 3C14.7 3 12 8 12 8"/></svg></span>
+            <span>Rewards</span>
+          </button>
+          <button class="qa" type="button" data-action="open-claim">
+            <span class="qic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3z"/><path d="M14 14h3v3h-3zM18 14h3v7h-3M14 18h3v3h-3"/></svg></span>
+            <span>Claim</span>
+          </button>
+          <button class="qa" type="button" data-action="nav" data-page="wallet">
+            <span class="qic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h15a2 2 0 0 1 2 2v12H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M16 11h5v4h-5a2 2 0 0 1 0-4z"/></svg></span>
+            <span>Wallet</span>
+          </button>
+          <button class="qa" type="button" data-action="refer">
+            <span class="qic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="7" r="2"/><path d="M2 20c0-4 2.5-7 6-7s6 3 6 7"/><path d="M14 13c3.2 0 6 2.2 6 6"/></svg></span>
+            <span>Refer</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="sec">
+        <article class="card promo">
+          <span class="ptag">Just for you</span>
+          <h3 class="ptitle">Double points this weekend</h3>
+          <p class="pcopy">Earn twice the points at every participating outlet.</p>
+        </article>
+      </section>
+
+      <section class="sec">
+        <div class="sech">
+          <h3 class="sect">Recent activity</h3>
+          <button class="seclink" type="button" data-action="nav" data-page="activity">View all</button>
+        </div>
+        <div class="card"><div class="alist" id="recentActivity"></div></div>
+      </section>
+    </section>
+
+    <!-- REWARDS -->
+    <section class="page" id="page-rewards">
+      <p class="eyebrow">Make your points count</p>
+      <h2 class="title">Rewards</h2>
+      <p class="sub">Curated rewards that make every visit more valuable.</p>
+      <div class="chips" id="rewardChips">
+        <button class="chip active" type="button" data-action="filter" data-filter="all">All</button>
+        <button class="chip" type="button" data-action="filter" data-filter="food">Dining</button>
+        <button class="chip" type="button" data-action="filter" data-filter="voucher">Vouchers</button>
+        <button class="chip" type="button" data-action="filter" data-filter="experience">Experiences</button>
+      </div>
+      <div class="rgrid" id="rewardGrid"></div>
+    </section>
+
+    <!-- WALLET -->
+    <section class="page" id="page-wallet">
+      <p class="eyebrow">Ready when you are</p>
+      <h2 class="title">My wallet</h2>
+      <p class="sub">All your available vouchers and benefits in one place.</p>
+      <div id="walletList"></div>
+    </section>
+
+    <!-- ACTIVITY -->
+    <section class="page" id="page-activity">
+      <p class="eyebrow">Your loyalty journey</p>
+      <h2 class="title">Activity</h2>
+      <p class="sub">A transparent record of points earned and used.</p>
+      <div class="card"><div class="alist" id="fullActivity"></div></div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="page" id="page-profile">
+      <h2 class="sr">Member profile</h2>
+      <article class="card phero">
+        <div class="pava" id="profileAvatar">AT</div>
+        <h3 class="pname" id="profileName">Alyssa Tan</h3>
+        <p class="pphone" id="profilePhone">+60 12-345 6789</p>
+        <div class="ptier" id="profileTier">Gold Member</div>
+      </article>
+      <section class="sec">
+        <div class="sech"><h3 class="sect">Account</h3></div>
+        <div class="card settings">
+          <button class="srow" type="button" data-action="soon" data-label="Personal information">
+            <span class="sic">◉</span>
+            <span class="scopy"><span class="st">Personal information</span><span class="sc">Name, birthday and contact details</span></span>
+            <span class="sarr">›</span>
+          </button>
+          <button class="srow" type="button" data-action="soon" data-label="Communication preferences">
+            <span class="sic">✉</span>
+            <span class="scopy"><span class="st">Communication preferences</span><span class="sc">Choose the updates you receive</span></span>
+            <span class="sarr">›</span>
+          </button>
+          <button class="srow" type="button" data-action="refer">
+            <span class="sic">☍</span>
+            <span class="scopy"><span class="st">Refer a friend</span><span class="sc">Share your code and earn bonus points</span></span>
+            <span class="sarr">›</span>
+          </button>
+          <button class="srow" type="button" data-action="soon" data-label="Help and support">
+            <span class="sic">?</span>
+            <span class="scopy"><span class="st">Help and support</span><span class="sc">Get help with your membership</span></span>
+            <span class="sarr">›</span>
+          </button>
+        </div>
+      </section>
+    </section>
+  </main>
+</div>
+
+<div class="fab">
+  <button class="fabbtn" type="button" data-action="open-claim">Scan or claim a receipt</button>
+</div>
+
+<nav class="bn" aria-label="Primary">
+  <button class="nb active" type="button" data-action="nav" data-page="home">
+    <span class="nic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8"/><path d="M5 10v11h14V10"/><path d="M9 21v-7h6v7"/></svg></span>
+    <span class="nl">Home</span>
+  </button>
+  <button class="nb" type="button" data-action="nav" data-page="rewards">
+    <span class="nic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18"/><path d="M7.5 8C5 8 4 6.8 4 5.5S5.2 3 6.7 3C9.3 3 12 8 12 8"/><path d="M16.5 8C19 8 20 6.8 20 5.5S18.8 3 17.3 3C14.7 3 12 8 12 8"/></svg></span>
+    <span class="nl">Rewards</span>
+  </button>
+  <button class="nb" type="button" data-action="nav" data-page="wallet">
+    <span class="nic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h15a2 2 0 0 1 2 2v12H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M16 11h5v4h-5a2 2 0 0 1 0-4z"/></svg></span>
+    <span class="nl">Wallet</span>
+  </button>
+  <button class="nb" type="button" data-action="nav" data-page="activity">
+    <span class="nic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></span>
+    <span class="nl">Activity</span>
+  </button>
+  <button class="nb" type="button" data-action="nav" data-page="profile">
+    <span class="nic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-5 3-8 8-8s8 3 8 8"/></svg></span>
+    <span class="nl">Profile</span>
+  </button>
+</nav>
+
+<!-- CLAIM MODAL -->
+<div class="mb" id="claimModal" role="dialog" aria-modal="true" aria-labelledby="claimTitle">
+  <div class="mp">
+    <div class="mh">
+      <h2 class="mt" id="claimTitle">Claim receipt</h2>
+      <button class="mx" type="button" data-action="close-modal" data-modal="claimModal" aria-label="Close">×</button>
+    </div>
+
+    <div class="mc" id="claimFormView">
+      <div class="ill">◫</div>
+      <h3 class="ch">Your points are ready</h3>
+      <p class="cc">Enter your phone number to claim the points from this receipt.</p>
+
+      <div class="rprev">
+        <div class="rrow"><span>Receipt</span><strong id="rcpId">—</strong></div>
+        <div class="rrow"><span>Outlet</span><strong id="rcpOutlet">—</strong></div>
+        <div class="rrow"><span>Amount</span><strong id="rcpAmount">—</strong></div>
+        <div class="rrow"><span>Date</span><strong id="rcpDate">—</strong></div>
+        <div class="cpts"><span>You will earn</span><strong id="rcpPoints">0 points</strong></div>
+      </div>
+
+      <form id="claimForm" novalidate>
+        <div class="field">
+          <label class="flabel" for="phoneInput">Mobile number</label>
+          <div class="pfield">
+            <div class="cc2">+60</div>
+            <input class="inp" id="phoneInput" type="tel" inputmode="numeric" autocomplete="tel"
+                   maxlength="11" placeholder="12 345 6789" aria-describedby="phoneError" required>
+          </div>
+          <p class="ferr" id="phoneError" role="alert"></p>
+        </div>
+        <button class="btn btn-p w100" id="claimBtn" type="submit">Claim points</button>
+        <p class="note">By continuing you confirm you are authorised to claim this receipt and accept the programme terms.</p>
+      </form>
+    </div>
+
+    <div class="mc hidden" id="claimSuccessView">
+      <div class="sv">
+        <div class="schk">✓</div>
+        <h3 class="stitle">Points added</h3>
+        <p class="ssub">Your receipt was claimed successfully and your balance is updated.</p>
+        <div class="spts"><span>Points earned</span><strong id="earnedPoints">+0</strong></div>
+        <button class="btn btn-p w100" type="button" data-action="finish-claim">View my balance</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REWARD MODAL -->
+<div class="mb" id="rewardModal" role="dialog" aria-modal="true" aria-labelledby="rewardTitle">
+  <div class="mp">
+    <div class="mh">
+      <h2 class="mt" id="rewardTitle">Reward details</h2>
+      <button class="mx" type="button" data-action="close-modal" data-modal="rewardModal" aria-label="Close">×</button>
+    </div>
+    <div class="mc" id="rewardModalBody"></div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ============================================================
+     1) CONFIGURATION — white-label per merchant
+     ============================================================ */
+  var APP_CONFIG = {
+    merchant: {
+      tenantId: "TENANT-NOVA-001",
+      brandName: "Nova Rewards",
+      brandInitial: "N",
+      currencySymbol: "RM",
+      referralCode: "ALYSSA2026",
+      theme: {
+        primary: "#6d5dfc",
+        primaryDark: "#5547df",
+        secondary: "#00b8a9",
+        accent: "#ffb703",
+        background: "#f6f7ff"
+      }
+    },
+    /* Never commit a live Power Automate URL to a public repo.
+       Put a secured gateway/proxy URL here when the backend is ready. */
+    api: {
+      claimReceipt: "PASTE_SECURE_CLAIM_ENDPOINT_HERE",
+      redeemReward: "PASTE_SECURE_REDEEM_ENDPOINT_HERE"
+    },
+    demoMode: true,
+    pointsPerCurrency: 1
+  };
+
+  /* ============================================================
+     2) STATE
+     ============================================================ */
+  var state = {
+    page: "home",
+    filter: "all",
+    member: {
+      firstName: "Alyssa",
+      lastName: "Tan",
+      phone: "+60 12-345 6789",
+      tier: "Gold",
+      nextTier: "Platinum",
+      points: 2480,
+      tierFloor: 1500,
+      tierTarget: 3000,
+      memberSince: 2026
+    },
+    receipt: {
+      receiptId: "NV-20260928-8451",
+      outletId: "OUTLET-CENTRAL-01",
+      outletName: "Central Mall",
+      amount: 128.40,
+      transactionDate: "28 Sep 2026",
+      points: 128,
+      signature: "DEMO-SIGNATURE"
+    },
+    rewards: [
+      { id:"RWD-001", name:"Signature beverage", category:"food", categoryLabel:"Dining", points:550, emoji:"\u2615", description:"Enjoy one handcrafted signature beverage at participating outlets." },
+      { id:"RWD-002", name:"RM20 dining voucher", category:"voucher", categoryLabel:"Voucher", points:900, emoji:"\uD83C\uDF9F\uFE0F", description:"Receive RM20 off your next eligible dining transaction." },
+      { id:"RWD-003", name:"Premium dessert", category:"food", categoryLabel:"Dining", points:750, emoji:"\uD83C\uDF70", description:"Choose one premium dessert from the participating menu." },
+      { id:"RWD-004", name:"Members-only experience", category:"experience", categoryLabel:"Experience", points:2200, emoji:"\u2728", description:"Unlock a curated members-only experience for one person." }
+    ],
+    vouchers: [
+      { id:"VCH-1001", title:"RM10 Welcome Voucher", description:"RM10 off with a minimum eligible spend of RM50.", expiry:"31 Oct 2026", status:"Available" },
+      { id:"VCH-1002", title:"Complimentary Beverage", description:"One complimentary beverage at participating outlets.", expiry:"15 Nov 2026", status:"Available" }
+    ],
+    activities: [
+      { type:"earned",   title:"Receipt claimed",  meta:"Central Mall \u2022 26 Sep 2026",   points:120 },
+      { type:"bonus",    title:"Campaign bonus",   meta:"Weekend bonus \u2022 21 Sep 2026",  points:80 },
+      { type:"redeemed", title:"Reward redeemed",  meta:"Signature beverage \u2022 18 Sep 2026", points:-550 },
+      { type:"earned",   title:"Receipt claimed",  meta:"Riverside Outlet \u2022 11 Sep 2026", points:245 },
+      { type:"earned",   title:"Referral completed", meta:"Referral reward \u2022 3 Sep 2026", points:200 }
+    ]
+  };
+
+  /* ============================================================
+     3) UTILITIES
+     ============================================================ */
+  function $(id) { return document.getElementById(id); }
+
+  function setText(id, value) {
+    var el = $(id);
+    if (el) { el.textContent = value; }
+  }
+
+  function esc(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function num(value) {
+    var n = Number(value);
+    if (!isFinite(n)) { return "0"; }
+    return n.toLocaleString("en-US");
+  }
+
+  function money(value) {
+    var n = Number(value);
+    if (!isFinite(n)) { return "\u2014"; }
+    return APP_CONFIG.merchant.currencySymbol + " " + n.toFixed(2);
+  }
+
+  function digits(value) { return String(value).replace(/\D/g, ""); }
+
+  function validPhone(value) {
+    var d = digits(value);
+    if (d.indexOf("60") === 0) { return /^601\d{8,9}$/.test(d); }
+    if (d.charAt(0) === "0")   { return /^01\d{8,9}$/.test(d); }
+    return /^1\d{8,9}$/.test(d);
+  }
+
+  function normalizePhone(value) {
+    var d = digits(value);
+    if (d.indexOf("60") === 0) { return "+" + d; }
+    if (d.charAt(0) === "0") { d = d.slice(1); }
+    return "+60" + d;
+  }
+
+  function wait(ms) {
+    return new Promise(function (resolve) { setTimeout(resolve, ms); });
+  }
+
+  /* ============================================================
+     4) BRANDING
+     ============================================================ */
+  function applyBranding() {
+    var m = APP_CONFIG.merchant;
+    var root = document.documentElement;
+    root.style.setProperty("--primary", m.theme.primary);
+    root.style.setProperty("--primary-dark", m.theme.primaryDark);
+    root.style.setProperty("--secondary", m.theme.secondary);
+    root.style.setProperty("--accent", m.theme.accent);
+    root.style.setProperty("--bg", m.theme.background);
+    document.title = m.brandName;
+    setText("brandName", m.brandName);
+    setText("brandLogo", m.brandInitial);
+    setText("cardMark", m.brandInitial);
+  }
+
+  /* ============================================================
+     5) MEMBER RENDERING
+     ============================================================ */
+  function renderMember() {
+    var m = state.member;
+    var full = m.firstName + " " + m.lastName;
+    var initials = (m.firstName.charAt(0) + m.lastName.charAt(0)).toUpperCase();
+
+    setText("welcomeName", m.firstName);
+    setText("homeAvatar", initials);
+    setText("profileAvatar", initials);
+    setText("cardName", full);
+    setText("profileName", full);
+    setText("profilePhone", m.phone);
+    setText("cardSince", "Member since " + m.memberSince);
+    setText("tierBadge", m.tier + " Member");
+    setText("profileTier", m.tier + " Member");
+    setText("pointsBalance", num(m.points));
+    setText("tierFloorLabel", m.tier + ": " + num(m.tierFloor));
+    setText("tierTargetLabel", m.nextTier + ": " + num(m.tierTarget));
+
+    var remaining = Math.max(0, m.tierTarget - m.points);
+    setText("tierCaption", remaining === 0
+      ? "You have reached " + m.nextTier
+      : num(remaining) + " more points to unlock " + m.nextTier);
+
+    var span = m.tierTarget - m.tierFloor;
+    var pct = span > 0 ? ((m.points - m.tierFloor) / span) * 100 : 100;
+    pct = Math.min(100, Math.max(0, Math.round(pct)));
+
+    var fill = $("tierFill");
+    if (fill) { fill.style.width = pct + "%"; }
+    var bar = $("tierBar");
+    if (bar) { bar.setAttribute("aria-valuenow", String(pct)); }
+  }
+
+  /* ============================================================
+     6) RECEIPT PREVIEW
+     ============================================================ */
+  function renderReceipt() {
+    var r = state.receipt;
+    setText("rcpId", r.receiptId);
+    setText("rcpOutlet", r.outletName);
+    setText("rcpAmount", money(r.amount));
+    setText("rcpDate", r.transactionDate);
+    setText("rcpPoints", num(r.points) + " points");
+    setClaimLoading(false);
+  }
+
+  /* ============================================================
+     7) LISTS
+     ============================================================ */
+  function activityRow(a) {
+    var negative = Number(a.points) < 0;
+    var cls = a.type === "redeemed" ? "redeemed" : (a.type === "bonus" ? "bonus" : "");
+    var icon = a.type === "redeemed" ? "\u2193" : (a.type === "bonus" ? "\u2726" : "\u2191");
+    return '<div class="aitem">' +
+             '<div class="aic ' + cls + '">' + icon + '</div>' +
+             '<div><p class="at">' + esc(a.title) + '</p><p class="am">' + esc(a.meta) + '</p></div>' +
+             '<div class="ap ' + (negative ? "neg" : "") + '">' +
+               (negative ? "" : "+") + num(a.points) +
+             '</div>' +
+           '</div>';
+  }
+
+  function renderActivity() {
+    var full = $("fullActivity");
+    var recent = $("recentActivity");
+    var rows = state.activities.map(activityRow);
+    if (full) { full.innerHTML = rows.join(""); }
+    if (recent) { recent.innerHTML = rows.slice(0, 3).join(""); }
+  }
+
+  function renderRewards() {
+    var grid = $("rewardGrid");
+    if (!grid) { return; }
+
+    var list = state.filter === "all"
+      ? state.rewards
+      : state.rewards.filter(function (r) { return r.category === state.filter; });
+
+    if (!list.length) {
+      grid.innerHTML = '<div class="card empty" style="grid-column:1/-1">' +
+        '<div class="eic">\u2726</div>' +
+        '<h3 class="etitle">Nothing here yet</h3>' +
+        '<p class="ecopy">There are no rewards in this category right now.</p></div>';
+      return;
+    }
+
+    grid.innerHTML = list.map(function (r) {
+      var can = state.member.points >= r.points;
+      return '<button class="rcard" type="button" data-action="open-reward" data-id="' + esc(r.id) + '">' +
+               '<span class="rimg">' + esc(r.emoji) + '</span>' +
+               '<span class="rbody">' +
+                 '<span class="rcat">' + esc(r.categoryLabel) + '</span>' +
+                 '<span class="rname" style="display:block">' + esc(r.name) + '</span>' +
+                 '<span class="rprice ' + (can ? "" : "rlock") + '">\u2726 ' + num(r.points) + ' points</span>' +
+               '</span>' +
+             '</button>';
+    }).join("");
+  }
+
+  function renderWallet() {
+    var list = $("walletList");
+    if (!list) { return; }
+
+    if (!state.vouchers.length) {
+      list.innerHTML = '<div class="card empty">' +
+        '<div class="eic">\uD83C\uDF9F\uFE0F</div>' +
+        '<h3 class="etitle">Your wallet is ready</h3>' +
+        '<p class="ecopy">Rewards and vouchers you redeem will appear here.</p></div>';
+      return;
+    }
+
+    list.innerHTML = state.vouchers.map(function (v) {
+      return '<article class="card vcard">' +
+               '<div class="vtop"><div class="vic">\uD83C\uDF9F\uFE0F</div>' +
+               '<span class="vstat">' + esc(v.status) + '</span></div>' +
+               '<h3 class="vtitle">' + esc(v.title) + '</h3>' +
+               '<p class="vdesc">' + esc(v.description) + '</p>' +
+               '<div class="vfoot">' +
+                 '<span class="vexp">Valid until ' + esc(v.expiry) + '</span>' +
+                 '<button class="vact" type="button" data-action="open-voucher" data-id="' + esc(v.id) + '">View code</button>' +
+               '</div>' +
+             '</article>';
+    }).join("");
+  }
+
+  /* ============================================================
+     8) NAVIGATION
+     ============================================================ */
+  function navigate(page) {
+    var target = $("page-" + page);
+    if (!target) { return; }
+
+    var pages = document.querySelectorAll(".page");
+    for (var i = 0; i < pages.length; i++) { pages[i].classList.remove("active"); }
+    target.classList.add("active");
+
+    var buttons = document.querySelectorAll(".nb");
+    for (var j = 0; j < buttons.length; j++) {
+      buttons[j].classList.toggle("active", buttons[j].getAttribute("data-page") === page);
+    }
+
+    state.page = page;
+    document.body.classList.toggle("fab-on", page === "home");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ============================================================
+     9) MODALS
+     ============================================================ */
+  function openModal(id) {
+    var el = $(id);
+    if (!el) { return; }
+    el.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal(id) {
+    var el = $(id);
+    if (!el) { return; }
+    el.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  function closeAllModals() {
+    var open = document.querySelectorAll(".mb.open");
+    for (var i = 0; i < open.length; i++) { open[i].classList.remove("open"); }
+    document.body.style.overflow = "";
+  }
+
+  /* ============================================================
+     10) TOASTS
+     ============================================================ */
+  var toastTimer = null;
+  function toast(message, type) {
+    var host = $("toasts");
+    if (!host) { return; }
+    var kind = type === "error" ? "error" : "success";
+    host.innerHTML = '<div class="toast ' + kind + '">' +
+      '<span class="tdot">' + (kind === "error" ? "!" : "\u2713") + '</span>' +
+      '<span>' + esc(message) + '</span></div>';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { host.innerHTML = ""; }, 3200);
+  }
+
+  /* ============================================================
+     11) CLAIM FLOW
+     ============================================================ */
+  function setClaimLoading(loading) {
+    var btn = $("claimBtn");
+    if (!btn) { return; }
+    btn.disabled = !!loading;
+    btn.innerHTML = loading
+      ? '<span class="spin"></span>Validating receipt'
+      : "Claim " + num(state.receipt.points) + " points";
+  }
+
+  function openClaim() {
+    var formView = $("claimFormView");
+    var successView = $("claimSuccessView");
+    if (formView) { formView.classList.remove("hidden"); }
+    if (successView) { successView.classList.add("hidden"); }
+    setText("phoneError", "");
+    setClaimLoading(false);
+    openModal("claimModal");
+    setTimeout(function () {
+      var input = $("phoneInput");
+      if (input) { input.focus(); }
+    }, 180);
+  }
+
+  async function postJson(url, payload) {
+    if (!url || url.indexOf("PASTE_SECURE") === 0) {
+      throw new Error("The secure API endpoint has not been configured yet.");
+    }
+    var res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    var body = {};
+    try { body = await res.json(); } catch (e) { body = {}; }
+    if (!res.ok) {
+      throw new Error(body.message || ("Request failed with HTTP " + res.status + "."));
+    }
+    return body;
+  }
+
+  async function submitClaim(event) {
+    event.preventDefault();
+
+    var input = $("phoneInput");
+    var value = input ? input.value.trim() : "";
+
+    if (!validPhone(value)) {
+      setText("phoneError", "Enter a valid Malaysian mobile number.");
+      if (input) { input.focus(); }
+      return;
+    }
+
+    setText("phoneError", "");
+    setClaimLoading(true);
+
+    var payload = {
+      tenantId: APP_CONFIG.merchant.tenantId,
+      receiptId: state.receipt.receiptId,
+      outletId: state.receipt.outletId,
+      phone: normalizePhone(value),
+      signature: state.receipt.signature,
+      clientTimestamp: new Date().toISOString()
+    };
+
+    try {
+      var result;
+
+      if (APP_CONFIG.demoMode) {
+        await wait(900);
+        result = {
+          status: "success",
+          pointsEarned: state.receipt.points,
+          updatedBalance: state.member.points + state.receipt.points
+        };
+      } else {
+        result = await postJson(APP_CONFIG.api.claimReceipt, payload);
+      }
+
+      if (!result || result.status !== "success") {
+        throw new Error((result && result.message) || "This receipt could not be claimed.");
+      }
+
+      state.member.points = Number(result.updatedBalance);
+      state.activities.unshift({
+        type: "earned",
+        title: "Receipt claimed",
+        meta: state.receipt.outletName + " \u2022 Today",
+        points: Number(result.pointsEarned)
+      });
+
+      renderMember();
+      renderActivity();
+      renderRewards();
+
+      setText("earnedPoints", "+" + num(result.pointsEarned));
+      $("claimFormView").classList.add("hidden");
+      $("claimSuccessView").classList.remove("hidden");
+
+    } catch (error) {
+      toast(error.message || "We could not process your claim.", "error");
+    } finally {
+      setClaimLoading(false);
+    }
+  }
+
+  /* ============================================================
+     12) REWARD DETAIL + REDEMPTION
+     ============================================================ */
+  function openReward(id) {
+    var reward = null;
+    for (var i = 0; i < state.rewards.length; i++) {
+      if (state.rewards[i].id === id) { reward = state.rewards[i]; break; }
+    }
+    if (!reward) { return; }
+
+    var can = state.member.points >= reward.points;
+    var short = Math.max(0, reward.points - state.member.points);
+
+    $("rewardModalBody").innerHTML =
+      '<div class="ill">' + esc(reward.emoji) + '</div>' +
+      '<h3 class="ch">' + esc(reward.name) + '</h3>' +
+      '<p class="cc">' + esc(reward.description) + '</p>' +
+      '<div class="cpts"><span>Redemption value</span><strong>' + num(reward.points) + ' points</strong></div>' +
+      '<button class="btn btn-p w100" style="margin-top:18px" type="button" ' +
+        (can ? 'data-action="redeem" data-id="' + esc(reward.id) + '"' : "disabled") + '>' +
+        (can ? "Redeem this reward" : "Earn " + num(short) + " more points") +
+      '</button>' +
+      '<p class="note">In production, redemption must be validated by the server before a voucher is issued.</p>';
+
+    openModal("rewardModal");
+  }
+
+  function redeem(id) {
+    var reward = null;
+    for (var i = 0; i < state.rewards.length; i++) {
+      if (state.rewards[i].id === id) { reward = state.rewards[i]; break; }
+    }
+    if (!reward) { return; }
+
+    if (state.member.points < reward.points) {
+      toast("You do not have enough points.", "error");
+      return;
+    }
+
+    state.member.points -= reward.points;
+
+    state.vouchers.unshift({
+      id: "VCH-" + Date.now(),
+      title: reward.name,
+      description: "Issued from your points redemption.",
+      expiry: "30 Nov 2026",
+      status: "Available"
+    });
+
+    state.activities.unshift({
+      type: "redeemed",
+      title: "Reward redeemed",
+      meta: reward.name + " \u2022 Today",
+      points: -reward.points
+    });
+
+    renderMember();
+    renderWallet();
+    renderActivity();
+    renderRewards();
+    closeModal("rewardModal");
+    toast("Reward added to your wallet.", "success");
+  }
+
+  /* ============================================================
+     13) REFERRAL
+     ============================================================ */
+  function referral() {
+    var code = APP_CONFIG.merchant.referralCode;
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(code).then(function () {
+        toast("Referral code " + code + " copied.", "success");
+      }).catch(function () {
+        toast("Your referral code is " + code + ".", "success");
+      });
+      return;
+    }
+    toast("Your referral code is " + code + ".", "success");
+  }
+
+  /* ============================================================
+     14) QR URL PARAMETERS (untrusted — server must re-validate)
+     ============================================================ */
+  function readReceiptFromUrl() {
+    var params = new URLSearchParams(window.location.search);
+    var receiptId = params.get("receipt");
+    if (!receiptId) { return false; }
+
+    state.receipt.receiptId = receiptId.slice(0, 80);
+
+    var outlet = params.get("outlet");
+    if (outlet) { state.receipt.outletName = outlet.slice(0, 80); }
+
+    var outletId = params.get("outletid");
+    if (outletId) { state.receipt.outletId = outletId.slice(0, 80); }
+
+    var amount = Number(params.get("amount"));
+    if (isFinite(amount) && amount > 0) {
+      state.receipt.amount = amount;
+      state.receipt.points = Math.floor(amount * APP_CONFIG.pointsPerCurrency);
+    }
+
+    var date = params.get("date");
+    if (date) { state.receipt.transactionDate = date.slice(0, 40); }
+
+    var sig = params.get("sig");
+    if (sig) { state.receipt.signature = sig.slice(0, 300); }
+
+    return true;
+  }
+
+  /* ============================================================
+     15) EVENT DELEGATION (CSP-safe, no inline handlers)
+     ============================================================ */
+  document.addEventListener("click", function (event) {
+    // Modal backdrop click
+    if (event.target.classList && event.target.classList.contains("mb")) {
+      closeModal(event.target.id);
+      return;
+    }
+
+    var trigger = event.target.closest("[data-action]");
+    if (!trigger) { return; }
+
+    var action = trigger.getAttribute("data-action");
+
+    if (action === "nav") {
+      navigate(trigger.getAttribute("data-page"));
+
+    } else if (action === "open-claim") {
+      openClaim();
+
+    } else if (action === "close-modal") {
+      closeModal(trigger.getAttribute("data-modal"));
+
+    } else if (action === "finish-claim") {
+      closeModal("claimModal");
+      navigate("home");
+      toast("Your points balance has been updated.", "success");
+
+    } else if (action === "filter") {
+      state.filter = trigger.getAttribute("data-filter");
+      var chips = document.querySelectorAll(".chip");
+      for (var i = 0; i < chips.length; i++) { chips[i].classList.remove("active"); }
+      trigger.classList.add("active");
+      renderRewards();
+
+    } else if (action === "open-reward") {
+      openReward(trigger.getAttribute("data-id"));
+
+    } else if (action === "redeem") {
+      redeem(trigger.getAttribute("data-id"));
+
+    } else if (action === "open-voucher") {
+      toast("Voucher " + trigger.getAttribute("data-id") + " is ready for validation at the counter.", "success");
+
+    } else if (action === "refer") {
+      referral();
+
+    } else if (action === "notify") {
+      toast("You have no new notifications.", "success");
+
+    } else if (action === "soon") {
+      toast(trigger.getAttribute("data-label") + " will connect to your profile API.", "success");
+    }
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") { closeAllModals(); }
+  });
+
+  /* ============================================================
+     16) BOOTSTRAP
+     ============================================================ */
+  function init() {
+    applyBranding();
+
+    var hasReceipt = readReceiptFromUrl();
+
+    renderMember();
+    renderReceipt();
+    renderRewards();
+    renderWallet();
+    renderActivity();
+
+    var form = $("claimForm");
+    if (form) { form.addEventListener("submit", submitClaim); }
+
+    var phone = $("phoneInput");
+    if (phone) {
+      phone.addEventListener("input", function (e) {
+        e.target.value = digits(e.target.value).slice(0, 11);
+        setText("phoneError", "");
+      });
+    }
+
+    if (hasReceipt) { openClaim(); }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
