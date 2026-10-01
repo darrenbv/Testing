@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#060A18">
+  <title>CGC StockSense · Smart Stock Take</title>
+  https://fonts.googleapis.com
+  https://fonts.gstatic.com
+  https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap
+  styles.css
+  https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js>
+  .js" defer></script>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+
+  <!-- ================= LOGIN ================= -->
+  <section id="viewLogin" class="view active">
+    <div class="login-card glass">
+      <div class="brand">
+        <div class="brand-mark">CGC</div>
+        <div class="brand-text">
+          <h1>Stock<span>Sense</span></h1>
+          <p>Smart Stock Take Platform</p>
+        </div>
+      </div>
+      <div class="login-hero">
+        <div class="hero-chip">📷 Photo Proof</div>
+        <div class="hero-chip">⌁ Barcode Scan</div>
+        <div class="hero-chip">⚡ Real-time</div>
+        <div class="hero-chip">☁ Offline Sync</div>
+      </div>
+      <div id="stepEmail">
+        <label class="lbl" for="inpEmail">Staff Email</label>
+        <input id="inpEmail" type="email" class="inp" placeholder="name@cgc.com.my" autocomplete="email">
+        <button id="btnSendOtp" class="btn btn-primary btn-block">Send Verification Code</button>
+      </div>
+      <div id="stepOtp" class="hidden">
+        <label class="lbl" for="inpOtp">Verification Code</label>
+        <input id="inpOtp" type="text" inputmode="numeric" maxlength="6" class="inp inp-otp" placeholder="000000" autocomplete="one-time-code">
+        <button id="btnVerifyOtp" class="btn btn-primary btn-block">Verify &amp; Continue</button>
+        <button id="btnBackEmail" class="btn btn-ghost btn-block">Use a different email</button>
+      </div>
+      <p class="login-foot">Operations Department · Authorised Personnel Only</p>
+    </div>
+  </section>
+
+  <!-- ================= APP ================= -->
+  <section id="viewApp" class="view">
+    <header class="topbar glass">
+      <div class="brand sm">
+        <div class="brand-mark">CGC</div>
+        <div class="brand-text">
+          <h1>Stock<span>Sense</span></h1>
+          <p id="lblUser">—</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span id="netBadge" class="net-badge online"><i></i><b>Online</b></span>
+        <button id="btnLogout" class="icon-btn" title="Sign out" aria-label="Sign out">⏻</button>
+      </div>
+    </header>
+
+    <div class="context-bar glass">
+      <div class="field">
+        <label class="lbl" for="selSession">Session</label>
+        <select id="selSession" class="inp"></select>
+      </div>
+      <div class="field">
+        <label class="lbl" for="selLocation">Location</label>
+        <select id="selLocation" class="inp"></select>
+      </div>
+    </div>
+
+    <main class="content">
+      <!-- ========== COUNT TAB ========== -->
+      <div id="tabCount" class="tab active">
+
+        <div class="card glass">
+          <div class="card-head">
+            <h2><span class="step">01</span> Identify Item</h2>
+            <button id="btnScan" class="btn btn-accent btn-sm">⌁ Scan</button>
+          </div>
+          <div id="scanWrap" class="scan-wrap hidden">
+            <div id="reader"></div>
+            <button id="btnStopScan" class="btn btn-ghost btn-block">Close Scanner</button>
+          </div>
+          <input id="inpSearch" class="inp" placeholder="Search code, name or barcode…" autocomplete="off">
+          <div id="searchResults" class="search-results"></div>
+
+          <div id="itemCard" class="item-card hidden">
+            <div class="item-top">
+              <div>
+                <div id="itCode" class="mono item-code"></div>
+                <div id="itName" class="item-name"></div>
+                <div id="itMeta" class="item-meta"></div>
+              </div>
+              <button id="btnClearItem" class="icon-btn sm" aria-label="Clear item">✕</button>
+            </div>
+            <div class="item-stats">
+              <div class="stat"><span>System Qty</span><b id="itSys" class="mono"></b></div>
+              <div class="stat"><span>UOM</span><b id="itUom"></b></div>
+              <div class="stat"><span>Location</span><b id="itLoc"></b></div>
+            </div>
+            <div id="itRecount" class="alert alert-warn hidden"></div>
+          </div>
+        </div>
+
+        <div id="cardCount" class="card glass disabled">
+          <div class="card-head"><h2><span class="step">02</span> Physical Count</h2></div>
+          <div class="stepper">
+            <button class="step-btn" data-delta="-1" aria-label="Minus one">−</button>
+            <input id="inpQty" type="number" inputmode="decimal" min="0" step="any" class="inp qty-inp mono" value="0">
+            <button class="step-btn" data-delta="1" aria-label="Plus one">+</button>
+          </div>
+          <div class="quick-add">
+            <button class="chip" data-delta="5">+5</button>
+            <button class="chip" data-delta="10">+10</button>
+            <button class="chip" data-delta="50">+50</button>
+            <button class="chip" data-reset="1">Reset</button>
+          </div>
+          <div id="varPreview" class="var-preview"></div>
+
+          <label class="lbl">Condition</label>
+          <div id="condChips" class="chips">
+            <button class="chip cond active" data-cond="Good">Good</button>
+            <button class="chip cond" data-cond="Damaged">Damaged</button>
+            <button class="chip cond" data-cond="Obsolete">Obsolete</button>
+            <button class="chip cond" data-cond="Missing">Missing</button>
+          </div>
+
+          <label class="lbl" for="inpRemarks">Remarks</label>
+          <textarea id="inpRemarks" class="inp" rows="3" maxlength="500" placeholder="Notes, discrepancies, observations…"></textarea>
+        </div>
+
+        <div id="cardPhoto" class="card glass disabled">
+          <div class="card-head">
+            <h2><span class="step">03</span> Photo Proof</h2>
+            <span id="photoCounter" class="mono muted">0 / 5</span>
+          </div>
+          <div id="camWrap" class="cam-wrap hidden">
+            <video id="camVideo" playsinline muted autoplay></video>
+            <div class="cam-overlay">
+              <div class="cam-frame"></div>
+              <div id="camStamp" class="cam-stamp mono"></div>
+            </div>
+            <div id="camFlash" class="cam-flash"></div>
+            <div class="cam-controls">
+              <button id="btnCamClose" class="cam-btn" aria-label="Close camera">✕</button>
+              <button id="btnCapture" class="shutter" aria-label="Capture photo"></button>
+              <button id="btnCamSwitch" class="cam-btn" aria-label="Switch camera">⟲</button>
+            </div>
+          </div>
+          <div class="photo-actions">
+            <button id="btnOpenCam" class="btn btn-primary">📷 Open Camera</button>
+            <button id="btnPickPhoto" class="btn btn-ghost">🖼 Upload</button>
+            <input id="fileCamera" type="file" accept="image/*" capture="environment" hidden>
+            <input id="fileGallery" type="file" accept="image/*" multiple hidden>
+          </div>
+          <div id="photoGrid" class="photo-grid"></div>
+          <p class="hint">Photos are auto-stamped with session, item, location, user, time and GPS for audit evidence.</p>
+        </div>
+
+        <div id="cardSubmit" class="card glass disabled">
+          <div class="card-head"><h2><span class="step">04</span> Review &amp; Submit</h2></div>
+          <div class="geo-row">
+            <span id="geoBadge" class="geo-badge">📍 Locating…</span>
+            <button id="btnGeo" class="btn btn-ghost btn-sm">Refresh GPS</button>
+          </div>
+          <button id="btnSubmit" class="btn btn-primary btn-block btn-lg">Submit Count</button>
+        </div>
+      </div>
+
+      <!-- ========== DASHBOARD TAB ========== -->
+      <div id="tabDash" class="tab">
+        <div class="card glass">
+          <div class="card-head">
+            <h2>Live Progress</h2>
+            <div class="row-gap">
+              <button id="btnExport" class="btn btn-ghost btn-sm">⇩ CSV</button>
+              <button id="btnRefreshDash" class="btn btn-accent btn-sm">↻ Refresh</button>
+            </div>
+          </div>
+          <div class="dash-hero">
+            <div class="ring-wrap">
+              <svg viewBox="0 0 120 120" class="ring">
+                <defs>
+                  <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#22D3EE"/>
+                    <stop offset="100%" stop-color="#A78BFA"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="60" cy="60" r="52" class="ring-bg"/>
+                <circle id="ringFg" cx="60" cy="60" r="52" class="ring-fg"/>
+              </svg>
+              <div class="ring-label"><b id="kpiPct" class="mono">0%</b><span>Complete</span></div>
+            </div>
+            <div class="kpi-grid">
+              <div class="kpi"><span>Counted</span><b id="kpiCounted" class="mono">0</b><small id="kpiTotal">of 0 items</small></div>
+              <div class="kpi"><span>Accuracy (IRA)</span><b id="kpiAcc" class="mono">—</b><small>match rate</small></div>
+              <div class="kpi warn"><span>Variances</span><b id="kpiVar" class="mono">0</b><small id="kpiVarVal">RM 0.00</small></div>
+              <div class="kpi"><span>Exceptions</span><b id="kpiExc" class="mono">0</b><small>damaged / obsolete / missing</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="card glass">
+          <div class="card-head"><h2>By Location</h2><span id="kpiCounters" class="muted"></span></div>
+          <div id="locBars" class="loc-bars"></div>
+        </div>
+        <div class="card glass">
+          <div class="card-head"><h2>Recent Activity</h2></div>
+          <div id="recentList" class="list"></div>
+        </div>
+      </div>
+
+      <!-- ========== QUEUE TAB ========== -->
+      <div id="tabQueue" class="tab">
+        <div class="card glass">
+          <div class="card-head">
+            <h2>Offline Queue</h2>
+            <button id="btnSync" class="btn btn-accent btn-sm">⇪ Sync Now</button>
+          </div>
+          <p class="hint">Counts saved without connection are stored on this device and auto-sync when you are back online.</p>
+          <div id="queueList" class="list"></div>
+        </div>
+      </div>
+    </main>
+
+    <nav class="bottom-nav glass">
+      <button class="nav-btn active" data-tab="tabCount"><i>▣</i><span>Count</span></button>
+      <button class="nav-btn" data-tab="tabDash"><i>◔</i><span>Dashboard</span></button>
+      <button class="nav-btn" data-tab="tabQueue"><i>⇅</i><span>Queue</span><em id="queueBadge" class="nav-badge hidden">0</em></button>
+    </nav>
+  </section>
+
+  <div id="loader" class="loader hidden"><div class="spinner"></div><p id="loaderText">Loading…</p></div>
+  <div id="toastHost" class="toast-host"></div>
+  <canvas id="workCanvas" hidden></canvas>
+</body>
+</html>
